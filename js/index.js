@@ -50,7 +50,7 @@ const displayword= (words) =>{
                       <p class="font-semibold">Meaning /Pronounciation </p>
                       <div class="text-2xl font-semibold text-gray-700 font-bang">${word.meaning ? word.meaning  : 'Meaning paoa jai ni'} / ${word.pronunciation ? word.pronunciation : 'pronunciation paoa jai ni'}</div>
                       <div class="flex justify-between mt-10">
-                        <button class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-circle-info"></i></button>
+                        <button onclick="my_modal_1.showModal()" class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-circle-info"></i></button>
                     <button class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-volume-high"></i></button>
                     </div>
                   </div>
