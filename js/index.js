@@ -1,4 +1,5 @@
 const loadingdeta= ()=>{
+  
     fetch('https://openapi.programming-hero.com/api/levels/all')
     .then(res => res.json())
     .then(data => displaydata(data.data))
@@ -10,7 +11,20 @@ const removeactive = () =>{
   
 }
 
+function pronounceWord(word) {
+  const utterance = new SpeechSynthesisUtterance(word);
+  utterance.lang = "en-EN"; // English
+  window.speechSynthesis.speak(utterance);
+}
+
 const loadContainer = (id)=>{
+  setTimeout(() => {
+  managesppiner()
+  // displayword()
+ 
+ 
+},2000)
+  managesppiner(true)
    fetch(`https://openapi.programming-hero.com/api/level/${id}`)
    .then(res => res.json())
    .then(data =>{
@@ -24,6 +38,7 @@ const loadContainer = (id)=>{
   
 }
 const displayword= (words) =>{
+   
     const wordContainer = document.getElementById('word-container')
      wordContainer.innerHTML = ''
     if(words.length === 0 ){
@@ -36,7 +51,7 @@ const displayword= (words) =>{
             </div>
              
              `
-
+       managesppiner(false)
         return
     }
      
@@ -52,13 +67,13 @@ const displayword= (words) =>{
                       <div class="text-2xl font-semibold text-gray-700 font-bang">${word.meaning ? word.meaning  : 'Meaning paoa jai ni'} / ${word.pronunciation ? word.pronunciation : 'pronunciation paoa jai ni'}</div>
                       <div class="flex justify-between mt-10">
                         <button onclick=" loadworddetails(${word.id})" class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-circle-info"></i></button>
-                    <button class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-volume-high"></i></button>
+                    <button onclick="pronounceWord('${word.word}')" class=" bg-gray-200 p-4 rounded"><i class="fa-solid fa-volume-high"></i></button>
                     </div>
                   </div>
          `
        wordContainer.appendChild(div)
      })
-
+    managesppiner(false)
 }
 
 
@@ -75,6 +90,17 @@ const loadworddetails = (id) =>{
 const createElement = (arr)=> {
   const htmlelements = arr.map((el)=> `<span class="btn mr-4">${el}<span/>`)
   return htmlelements.join(" ")
+}
+
+const  managesppiner = (status) => {
+  if(status === true){
+    document.getElementById('sppiner').classList.remove('hidden')
+    document.getElementById('word-container').classList.add('hidden')
+  }
+  else{
+    document.getElementById('sppiner').classList.add('hidden')
+      document.getElementById('word-container').classList.remove('hidden')
+  }
 }
 
 
@@ -122,6 +148,7 @@ const displaywordDetails = (details) => {
 
 
 const displaydata= (data) =>{
+ 
     const btnContainer = document.getElementById('btn-container')
       btnContainer.innerHTML = ''
     
@@ -138,6 +165,25 @@ const displaydata= (data) =>{
         `
         btnContainer.appendChild(btn)
     }
+   
 }
 
 loadingdeta()
+
+
+
+
+document.getElementById('search-btn').addEventListener('click', () =>{
+  const input = document.getElementById('search-input')
+   const inputvalue  = input.value.trim().toLowerCase()
+    removeactive()
+
+   fetch('https://openapi.programming-hero.com/api/words/all')
+   .then(res => res.json())
+   .then(data => {
+    const deta = data.data
+     
+    const matchingData = deta.filter(word => word.word.toLowerCase().includes(inputvalue))
+    displayword(matchingData)
+   })
+} )
